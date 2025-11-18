@@ -23,8 +23,8 @@ html(lang="zh-TW")
         overflow: hidden
 
       .container
-        width: 90%
-        max-width: 900px
+        width: 95%
+        max-width: 1400px
         margin: 20px auto
 
       h1
@@ -118,6 +118,7 @@ html(lang="zh-TW")
       .note-area
         position: relative
         width: 100%
+        min-width: 1320px
         height: 500px
         background: rgba(0,0,0,0.2)
         border-radius: 10px 10px 0 0
@@ -135,6 +136,7 @@ html(lang="zh-TW")
       .piano-container
         position: relative
         width: 100%
+        min-width: 1320px
         height: 150px
         background: #1f2937
         border-radius: 0 0 10px 10px
@@ -213,7 +215,8 @@ html(lang="zh-TW")
         .piano-container#piano-container
 
       .instructions
-        p 白鍵: A S D F G H J K | 黑鍵: W E T Y U
+        p 白鍵: Q W E R T Y U I O P [ ] Z X C V B N M , . /
+        p 黑鍵: 1 2 4 5 6 8 9 - = A S D F G H
         p 或使用滑鼠/觸控點擊琴鍵
 
     script(type="module"): :lsc
@@ -240,7 +243,13 @@ html(lang="zh-TW")
           note-map =
             'C4': -9, 'C#4': -8, 'D4': -7, 'D#4': -6
             'E4': -5, 'F4': -4, 'F#4': -3, 'G4': -2
-            'G#4': -1, 'A4': 0, 'A#4': 1, 'B4': 2, 'C5': 3
+            'G#4': -1, 'A4': 0, 'A#4': 1, 'B4': 2
+            'C5': 3, 'C#5': 4, 'D5': 5, 'D#5': 6
+            'E5': 7, 'F5': 8, 'F#5': 9, 'G5': 10, 'G#5': 11
+            'A5': 12, 'A#5': 13, 'B5': 14
+            'C6': 15, 'C#6': 16, 'D6': 17, 'D#6': 18
+            'E6': 19, 'F6': 20, 'F#6': 21, 'G6': 22, 'G#6': 23
+            'A6': 24, 'A#6': 25, 'B6': 26, 'C7': 27
           semitones = note-map[note]
           return 440 if not semitones?
           440 * Math.pow(2, semitones / 12)
@@ -284,19 +293,43 @@ html(lang="zh-TW")
           sound-engine: options.sound-engine or new SoundEngine!
           on-key-press: options.on-key-press or (->)
           keys: [
-            {note: 'C4', key: 'A', type: 'white', pos: 0}
-            {note: 'C#4', key: 'W', type: 'black', pos: 0.7}
-            {note: 'D4', key: 'S', type: 'white', pos: 1}
-            {note: 'D#4', key: 'E', type: 'black', pos: 1.8}
-            {note: 'E4', key: 'D', type: 'white', pos: 2}
-            {note: 'F4', key: 'F', type: 'white', pos: 3}
-            {note: 'F#4', key: 'T', type: 'black', pos: 3.7}
-            {note: 'G4', key: 'G', type: 'white', pos: 4}
-            {note: 'G#4', key: 'Y', type: 'black', pos: 4.75}
-            {note: 'A4', key: 'H', type: 'white', pos: 5}
-            {note: 'A#4', key: 'U', type: 'black', pos: 5.8}
-            {note: 'B4', key: 'J', type: 'white', pos: 6}
-            {note: 'C5', key: 'K', type: 'white', pos: 7}
+            {note: 'C4', key: 'Q', type: 'white', pos: 0}
+            {note: 'C#4', key: '1', type: 'black', pos: 0.7}
+            {note: 'D4', key: 'W', type: 'white', pos: 1}
+            {note: 'D#4', key: '2', type: 'black', pos: 1.8}
+            {note: 'E4', key: 'E', type: 'white', pos: 2}
+            {note: 'F4', key: 'R', type: 'white', pos: 3}
+            {note: 'F#4', key: '4', type: 'black', pos: 3.7}
+            {note: 'G4', key: 'T', type: 'white', pos: 4}
+            {note: 'G#4', key: '5', type: 'black', pos: 4.75}
+            {note: 'A4', key: 'Y', type: 'white', pos: 5}
+            {note: 'A#4', key: '6', type: 'black', pos: 5.8}
+            {note: 'B4', key: 'U', type: 'white', pos: 6}
+            {note: 'C5', key: 'I', type: 'white', pos: 7}
+            {note: 'C#5', key: '8', type: 'black', pos: 7.7}
+            {note: 'D5', key: 'O', type: 'white', pos: 8}
+            {note: 'D#5', key: '9', type: 'black', pos: 8.8}
+            {note: 'E5', key: 'P', type: 'white', pos: 9}
+            {note: 'F5', key: '[', type: 'white', pos: 10}
+            {note: 'F#5', key: '-', type: 'black', pos: 10.7}
+            {note: 'G5', key: ']', type: 'white', pos: 11}
+            {note: 'G#5', key: '=', type: 'black', pos: 11.75}
+            {note: 'A5', key: 'Z', type: 'white', pos: 12}
+            {note: 'A#5', key: 'A', type: 'black', pos: 12.8}
+            {note: 'B5', key: 'X', type: 'white', pos: 13}
+            {note: 'C6', key: 'C', type: 'white', pos: 14}
+            {note: 'C#6', key: 'S', type: 'black', pos: 14.7}
+            {note: 'D6', key: 'V', type: 'white', pos: 15}
+            {note: 'D#6', key: 'D', type: 'black', pos: 15.8}
+            {note: 'E6', key: 'B', type: 'white', pos: 16}
+            {note: 'F6', key: 'N', type: 'white', pos: 17}
+            {note: 'F#6', key: 'F', type: 'black', pos: 17.7}
+            {note: 'G6', key: 'M', type: 'white', pos: 18}
+            {note: 'G#6', key: 'G', type: 'black', pos: 18.75}
+            {note: 'A6', key: ',', type: 'white', pos: 19}
+            {note: 'A#6', key: 'H', type: 'black', pos: 19.8}
+            {note: 'B6', key: '.', type: 'white', pos: 20}
+            {note: 'C7', key: '/', type: 'white', pos: 21}
           ]
           key-map: {}
           active-keys: {}
@@ -456,7 +489,13 @@ html(lang="zh-TW")
           key-map =
             'C4': 0, 'C#4': 0.7, 'D4': 1, 'D#4': 1.8
             'E4': 2, 'F4': 3, 'F#4': 3.7, 'G4': 4
-            'G#4': 4.75, 'A4': 5, 'A#4': 5.8, 'B4': 6, 'C5': 7
+            'G#4': 4.75, 'A4': 5, 'A#4': 5.8, 'B4': 6
+            'C5': 7, 'C#5': 7.7, 'D5': 8, 'D#5': 8.8
+            'E5': 9, 'F5': 10, 'F#5': 10.7, 'G5': 11, 'G#5': 11.75
+            'A5': 12, 'A#5': 12.8, 'B5': 13
+            'C6': 14, 'C#6': 14.7, 'D6': 15, 'D#6': 15.8
+            'E6': 16, 'F6': 17, 'F#6': 17.7, 'G6': 18, 'G#6': 18.75
+            'A6': 19, 'A#6': 19.8, 'B6': 20, 'C7': 21
           pos = key-map[note-key] or 0
           pos * 60
         get-current-time: ->
