@@ -1,0 +1,53 @@
+{
+  "title": "小星星",
+  "bpm": 120,
+  "notes": [
+    {"time": 0, "key": "C4", "duration": 400},
+    {"time": 500, "key": "C4", "duration": 400},
+    {"time": 1000, "key": "G4", "duration": 400},
+    {"time": 1500, "key": "G4", "duration": 400},
+    {"time": 2000, "key": "A4", "duration": 400},
+    {"time": 2500, "key": "A4", "duration": 400},
+    {"time": 3000, "key": "G4", "duration": 800},
+
+    {"time": 4000, "key": "F4", "duration": 400},
+    {"time": 4500, "key": "F4", "duration": 400},
+    {"time": 5000, "key": "E4", "duration": 400},
+    {"time": 5500, "key": "E4", "duration": 400},
+    {"time": 6000, "key": "D4", "duration": 400},
+    {"time": 6500, "key": "D4", "duration": 400},
+    {"time": 7000, "key": "C4", "duration": 800},
+
+    {"time": 8000, "key": "G4", "duration": 400},
+    {"time": 8500, "key": "G4", "duration": 400},
+    {"time": 9000, "key": "F4", "duration": 400},
+    {"time": 9500, "key": "F4", "duration": 400},
+    {"time": 10000, "key": "E4", "duration": 400},
+    {"time": 10500, "key": "E4", "duration": 400},
+    {"time": 11000, "key": "D4", "duration": 800},
+
+    {"time": 12000, "key": "G4", "duration": 400},
+    {"time": 12500, "key": "G4", "duration": 400},
+    {"time": 13000, "key": "F4", "duration": 400},
+    {"time": 13500, "key": "F4", "duration": 400},
+    {"time": 14000, "key": "E4", "duration": 400},
+    {"time": 14500, "key": "E4", "duration": 400},
+    {"time": 15000, "key": "D4", "duration": 800},
+
+    {"time": 16000, "key": "C4", "duration": 400},
+    {"time": 16500, "key": "C4", "duration": 400},
+    {"time": 17000, "key": "G4", "duration": 400},
+    {"time": 17500, "key": "G4", "duration": 400},
+    {"time": 18000, "key": "A4", "duration": 400},
+    {"time": 18500, "key": "A4", "duration": 400},
+    {"time": 19000, "key": "G4", "duration": 800},
+
+    {"time": 20000, "key": "F4", "duration": 400},
+    {"time": 20500, "key": "F4", "duration": 400},
+    {"time": 21000, "key": "E4", "duration": 400},
+    {"time": 21500, "key": "E4", "duration": 400},
+    {"time": 22000, "key": "D4", "duration": 400},
+    {"time": 22500, "key": "D4", "duration": 400},
+    {"time": 23000, "key": "C4", "duration": 800}
+  ]
+}

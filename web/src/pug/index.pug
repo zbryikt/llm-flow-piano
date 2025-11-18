@@ -1,0 +1,608 @@
+doctype html
+html(lang="zh-TW")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title Piano Rhythm Game - 落下音符鋼琴遊戲
+
+    style(type="text/css"): :stylus
+      *
+        margin: 0
+        padding: 0
+        box-sizing: border-box
+
+      body
+        font-family: 'Arial', sans-serif
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
+        min-height: 100vh
+        display: flex
+        flex-direction: column
+        align-items: center
+        justify-content: center
+        color: #fff
+        overflow: hidden
+
+      .container
+        width: 90%
+        max-width: 900px
+        margin: 20px auto
+
+      h1
+        text-align: center
+        margin-bottom: 20px
+        font-size: 2.5em
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3)
+
+      .controls
+        text-align: center
+        margin-bottom: 20px
+
+        button
+          padding: 12px 30px
+          margin: 0 10px
+          font-size: 16px
+          border: none
+          border-radius: 8px
+          background: #fff
+          color: #667eea
+          cursor: pointer
+          font-weight: bold
+          transition: all 0.3s
+          box-shadow: 0 4px 6px rgba(0,0,0,0.2)
+
+          &:hover
+            transform: translateY(-2px)
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3)
+
+          &:active
+            transform: translateY(0)
+
+      .score-display
+        text-align: center
+        margin-bottom: 20px
+        font-size: 1.2em
+        background: rgba(255,255,255,0.1)
+        padding: 15px
+        border-radius: 10px
+        backdrop-filter: blur(10px)
+        position: relative
+        min-height: 80px
+
+        .score-item
+          margin: 5px 0
+
+        .perfect
+          color: #4ade80
+
+        .good
+          color: #fbbf24
+
+        .miss
+          color: #f87171
+
+      .judgment
+        position: absolute
+        top: 50%
+        left: 50%
+        transform: translate(-50%, -50%)
+        font-size: 2em
+        font-weight: bold
+        animation: judgment-fade 0.5s ease-out
+        pointer-events: none
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5)
+
+        &.judgment-perfect
+          color: #4ade80
+
+        &.judgment-good
+          color: #fbbf24
+
+        &.judgment-miss
+          color: #f87171
+
+      @keyframes judgment-fade
+        0%
+          opacity: 1
+          transform: translate(-50%, -50%) scale(1)
+        100%
+          opacity: 0
+          transform: translate(-50%, -70%) scale(1.5)
+
+      .game-area
+        background: rgba(0,0,0,0.3)
+        border-radius: 15px
+        padding: 20px
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3)
+        backdrop-filter: blur(10px)
+
+      .note-area
+        position: relative
+        width: 100%
+        height: 500px
+        background: rgba(0,0,0,0.2)
+        border-radius: 10px 10px 0 0
+        overflow: hidden
+        border-bottom: 3px solid #fbbf24
+
+      .note-bar
+        position: absolute
+        width: 50px
+        background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%)
+        border-radius: 5px
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3)
+        border: 2px solid rgba(255,255,255,0.3)
+
+      .piano-container
+        position: relative
+        width: 100%
+        height: 150px
+        background: #1f2937
+        border-radius: 0 0 10px 10px
+
+      .piano-key
+        position: absolute
+        bottom: 0
+        cursor: pointer
+        transition: all 0.1s
+        user-select: none
+
+        &.piano-key-white
+          width: 60px
+          height: 150px
+          background: linear-gradient(180deg, #f9fafb 0%, #e5e7eb 100%)
+          border: 2px solid #374151
+          border-radius: 0 0 8px 8px
+
+          &:hover
+            background: linear-gradient(180deg, #e5e7eb 0%, #d1d5db 100%)
+
+          &.active
+            background: linear-gradient(180deg, #93c5fd 0%, #60a5fa 100%)
+            transform: translateY(3px)
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.3)
+
+        &.piano-key-black
+          width: 36px
+          height: 100px
+          background: linear-gradient(180deg, #374151 0%, #1f2937 100%)
+          border: 2px solid #111827
+          border-radius: 0 0 5px 5px
+          z-index: 2
+
+          &:hover
+            background: linear-gradient(180deg, #4b5563 0%, #374151 100%)
+
+          &.active
+            background: linear-gradient(180deg, #60a5fa 0%, #3b82f6 100%)
+            transform: translateY(2px)
+
+        .key-label
+          position: absolute
+          bottom: 10px
+          left: 50%
+          transform: translateX(-50%)
+          font-size: 12px
+          font-weight: bold
+          color: #374151
+
+        &.piano-key-black .key-label
+          color: #fff
+
+      .instructions
+        margin-top: 20px
+        text-align: center
+        font-size: 0.9em
+        opacity: 0.8
+
+        p
+          margin: 5px 0
+
+  body
+    .container
+      h1 Piano Rhythm Game
+
+      .controls
+        button#start-btn Start
+        button#stop-btn Stop
+        button#reset-btn Reset
+
+      .score-display#score-display
+
+      .game-area
+        .note-area#note-area
+        .piano-container#piano-container
+
+      .instructions
+        p 白鍵: A S D F G H J K | 黑鍵: W E T Y U
+        p 或使用滑鼠/觸控點擊琴鍵
+
+    script(type="module"): :lsc
+      # 載入所有元件
+
+      # SoundEngine
+      sound-engine = (options = {}) ->
+        @ <<<
+          type: options.type or 'synth'
+          audio-ctx: null
+          samples: {}
+        @_init-audio-ctx! if options.auto-init
+        @
+
+      sound-engine.prototype = Object.create(Object.prototype) <<<
+        constructor: sound-engine
+
+        _init-audio-ctx: ->
+          return if @audio-ctx
+          AudioCtx = window.AudioContext || window.webkitAudioContext
+          @audio-ctx = new AudioCtx()
+
+        note-to-freq: (note) ->
+          note-map =
+            'C4': -9, 'C#4': -8, 'D4': -7, 'D#4': -6
+            'E4': -5, 'F4': -4, 'F#4': -3, 'G4': -2
+            'G#4': -1, 'A4': 0, 'A#4': 1, 'B4': 2, 'C5': 3
+          semitones = note-map[note]
+          return 440 if not semitones?
+          440 * Math.pow(2, semitones / 12)
+
+        play-synth: (frequency, duration = 0.3) ->
+          @_init-audio-ctx!
+          osc = @audio-ctx.createOscillator!
+          osc.type = 'sine'
+          osc.frequency.value = frequency
+          gain = @audio-ctx.createGain!
+          gain.gain.value = 0
+          osc.connect gain
+          gain.connect @audio-ctx.destination
+          now = @audio-ctx.currentTime
+          gain.gain.setValueAtTime 0, now
+          gain.gain.linearRampToValueAtTime 0.3, now + 0.01
+          gain.gain.linearRampToValueAtTime 0.2, now + 0.05
+          gain.gain.setValueAtTime 0.2, now + duration - 0.05
+          gain.gain.linearRampToValueAtTime 0, now + duration
+          osc.start now
+          osc.stop now + duration
+
+        play-sample: (note, duration = 0.3) ->
+          return unless @samples[note]
+          @samples[note].currentTime = 0
+          @samples[note].play!
+
+        play: (note, duration = 0.3) ->
+          freq = @note-to-freq note
+          if @type is 'synth'
+            @play-synth freq, duration
+          else
+            @play-sample note, duration
+
+      window.SoundEngine = sound-engine
+
+      # Piano
+      piano = (root, options = {}) ->
+        @ <<<
+          root: root
+          sound-engine: options.sound-engine or new SoundEngine!
+          on-key-press: options.on-key-press or (->)
+          keys: [
+            {note: 'C4', key: 'A', type: 'white', pos: 0}
+            {note: 'C#4', key: 'W', type: 'black', pos: 0.7}
+            {note: 'D4', key: 'S', type: 'white', pos: 1}
+            {note: 'D#4', key: 'E', type: 'black', pos: 1.8}
+            {note: 'E4', key: 'D', type: 'white', pos: 2}
+            {note: 'F4', key: 'F', type: 'white', pos: 3}
+            {note: 'F#4', key: 'T', type: 'black', pos: 3.7}
+            {note: 'G4', key: 'G', type: 'white', pos: 4}
+            {note: 'G#4', key: 'Y', type: 'black', pos: 4.75}
+            {note: 'A4', key: 'H', type: 'white', pos: 5}
+            {note: 'A#4', key: 'U', type: 'black', pos: 5.8}
+            {note: 'B4', key: 'J', type: 'white', pos: 6}
+            {note: 'C5', key: 'K', type: 'white', pos: 7}
+          ]
+          key-map: {}
+          active-keys: {}
+        for key-info in @keys
+          @key-map[key-info.key] = key-info.note
+        @init!
+        @
+
+      piano.prototype = Object.create(Object.prototype) <<<
+        constructor: piano
+        init: ->
+          @render!
+          @setup-events!
+        render: ->
+          @root.innerHTML = ""
+          @root.className = 'piano-container'
+          for key-info in @keys
+            key-el = document.createElement 'div'
+            key-el.className = "piano-key piano-key-#{key-info.type}"
+            key-el.dataset.note = key-info.note
+            key-el.dataset.key = key-info.key
+            key-el.style.left = "#{key-info.pos * 60}px"
+            label = document.createElement 'span'
+            label.className = 'key-label'
+            label.textContent = key-info.key
+            key-el.appendChild label
+            @root.appendChild key-el
+        setup-events: ->
+          document.addEventListener 'keydown', (e) ~> @on-keydown.apply @, [e]
+          document.addEventListener 'keyup', (e) ~> @on-keyup.apply @, [e]
+          keys = @root.querySelectorAll '.piano-key'
+          for key-el in keys
+            key-el.addEventListener 'mousedown', (e) ~> @on-mouse-down.apply @, [e]
+            key-el.addEventListener 'touchstart', (e) ~> @on-touch-start.apply @, [e]
+          document.addEventListener 'mouseup', (e) ~> @release-all-keys!
+          document.addEventListener 'touchend', (e) ~> @release-all-keys!
+        on-keydown: (e) ->
+          return if e.repeat
+          key = e.key.toUpperCase!
+          note = @key-map[key]
+          return unless note
+          @press-key note
+        on-keyup: (e) ->
+          key = e.key.toUpperCase!
+          note = @key-map[key]
+          return unless note
+          @release-key note
+        on-mouse-down: (e) ->
+          e.preventDefault!
+          note = e.currentTarget.dataset.note
+          @press-key note
+        on-touch-start: (e) ->
+          e.preventDefault!
+          note = e.currentTarget.dataset.note
+          @press-key note
+        press-key: (note) ->
+          return if @active-keys[note]
+          @active-keys[note] = true
+          key-el = @root.querySelector "[data-note='#{note}']"
+          key-el?.classList.add 'active' if key-el
+          @sound-engine.play note, 0.3
+          @on-key-press note
+        release-key: (note) ->
+          return unless @active-keys[note]
+          delete @active-keys[note]
+          key-el = @root.querySelector "[data-note='#{note}']"
+          key-el?.classList.remove 'active' if key-el
+        release-all-keys: ->
+          for note of @active-keys
+            @release-key note
+
+      window.Piano = piano
+
+      # NoteManager
+      note-manager = (root, options = {}) ->
+        @ <<<
+          root: root
+          speed: options.speed or 200
+          fall-distance: 500
+          notes: []
+          active-notes: []
+          note-elements: []
+          start-time: null
+          is-playing: false
+          on-note-hit: options.on-note-hit or (->)
+        @fall-time = @fall-distance / @speed * 1000
+        @init!
+        @
+
+      note-manager.prototype = Object.create(Object.prototype) <<<
+        constructor: note-manager
+        init: ->
+          @root.className = 'note-area'
+        load-song: (song-data) ->
+          @notes = song-data.notes or []
+          @title = song-data.title or 'Untitled'
+          @bpm = song-data.bpm or 120
+        start: ->
+          return if @is-playing
+          @is-playing = true
+          @start-time = Date.now!
+          @update!
+        stop: ->
+          @is-playing = false
+          @clear-notes!
+        reset: ->
+          @stop!
+          @active-notes = []
+          @note-elements = []
+          @clear-notes!
+          for note in @notes
+            note.spawned = false
+            note.hit-checked = false
+        clear-notes: ->
+          @root.innerHTML = ""
+          @note-elements = []
+        update: ->
+          return unless @is-playing
+          current-time = Date.now! - @start-time
+          @spawn-notes current-time
+          @update-notes current-time
+          requestAnimationFrame ~> @update!
+        spawn-notes: (current-time) ->
+          for note in @notes
+            spawn-time = note.time - @fall-time
+            if current-time >= spawn-time and not note.spawned
+              @create-note-element note
+              note.spawned = true
+              @active-notes.push note
+        create-note-element: (note) ->
+          el = document.createElement 'div'
+          el.className = 'note-bar'
+          el.dataset.note = note.key
+          key-pos = @get-key-position note.key
+          el.style.left = "#{key-pos + 5}px"
+          height = note.duration / 1000 * @speed
+          el.style.height = "#{height}px"
+          el.style.top = "0px"
+          @root.appendChild el
+          @note-elements.push {el: el, note: note}
+        update-notes: (current-time) ->
+          i = @note-elements.length
+          while i--
+            item = @note-elements[i]
+            note = item.note
+            el = item.el
+            elapsed = current-time - (note.time - @fall-time)
+            y = elapsed / @fall-time * @fall-distance
+            el.style.top = "#{y}px"
+            if y >= @fall-distance and not note.hit-checked
+              note.hit-checked = true
+              @on-note-hit note
+            if y > @fall-distance + 100
+              @root.removeChild el
+              @note-elements.splice i, 1
+        get-key-position: (note-key) ->
+          key-map =
+            'C4': 0, 'C#4': 0.7, 'D4': 1, 'D#4': 1.8
+            'E4': 2, 'F4': 3, 'F#4': 3.7, 'G4': 4
+            'G#4': 4.75, 'A4': 5, 'A#4': 5.8, 'B4': 6, 'C5': 7
+          pos = key-map[note-key] or 0
+          pos * 60
+        get-current-time: ->
+          return 0 unless @start-time
+          Date.now! - @start-time
+
+      window.NoteManager = note-manager
+
+      # Game
+      game = (options = {}) ->
+        @ <<<
+          piano-root: options.piano-root
+          note-root: options.note-root
+          score-root: options.score-root
+          sound-engine: null
+          piano: null
+          note-manager: null
+          score: 0
+          combo: 0
+          max-combo: 0
+          perfect-count: 0
+          good-count: 0
+          miss-count: 0
+          pending-judgments: []
+        @init!
+        @
+
+      game.prototype = Object.create(Object.prototype) <<<
+        constructor: game
+        init: ->
+          @sound-engine = new SoundEngine {auto-init: false}
+          @piano = new Piano @piano-root, {
+            sound-engine: @sound-engine
+            on-key-press: (note) ~> @on-key-press.apply @, [note]
+          }
+          @note-manager = new NoteManager @note-root, {
+            speed: 200
+            on-note-hit: (note) ~> @on-note-hit.apply @, [note]
+          }
+        load-song: (song-data) ->
+          @note-manager.load-song song-data
+        start: ->
+          @reset-score!
+          @note-manager.start!
+          @update-score-display!
+        stop: ->
+          @note-manager.stop!
+        reset: ->
+          @stop!
+          @note-manager.reset!
+          @reset-score!
+        reset-score: ->
+          @score = 0
+          @combo = 0
+          @max-combo = 0
+          @perfect-count = 0
+          @good-count = 0
+          @miss-count = 0
+          @pending-judgments = []
+          @update-score-display!
+        on-note-hit: (note) ->
+          @pending-judgments.push {
+            note: note
+            hit-time: @note-manager.get-current-time!
+            judged: false
+          }
+        on-key-press: (pressed-note) ->
+          current-time = @note-manager.get-current-time!
+          best-match = null
+          best-diff = Infinity
+          for judgment in @pending-judgments
+            continue if judgment.judged
+            continue if judgment.note.key != pressed-note
+            diff = Math.abs(current-time - judgment.note.time)
+            if diff < best-diff
+              best-diff = diff
+              best-match = judgment
+          if best-match
+            @judge-hit best-match, best-diff
+        judge-hit: (judgment, time-diff) ->
+          judgment.judged = true
+          if time-diff <= 50
+            @add-score 'perfect'
+            @show-judgment 'PERFECT'
+          else if time-diff <= 100
+            @add-score 'good'
+            @show-judgment 'GOOD'
+          else
+            @add-score 'miss'
+            @show-judgment 'MISS'
+        add-score: (type) ->
+          switch type
+          | 'perfect' =>
+            @perfect-count++
+            @combo++
+            @score += 100 * (1 + @combo * 0.1)
+          | 'good' =>
+            @good-count++
+            @combo++
+            @score += 50
+          | 'miss' =>
+            @miss-count++
+            @combo = 0
+          @max-combo = Math.max @max-combo, @combo
+          @update-score-display!
+        show-judgment: (text) ->
+          return unless @score-root
+          judgment-el = document.createElement 'div'
+          judgment-el.className = "judgment judgment-#{text.toLowerCase!}"
+          judgment-el.textContent = text
+          @score-root.appendChild judgment-el
+          setTimeout ->
+            judgment-el?.remove!
+          , 500
+        update-score-display: ->
+          return unless @score-root
+          @score-root.innerHTML = """
+            <div class="score-item">Score: #{Math.floor @score}</div>
+            <div class="score-item">Combo: #{@combo}</div>
+            <div class="score-item">
+              <span class="perfect">Perfect: #{@perfect-count}</span> /
+              <span class="good">Good: #{@good-count}</span> /
+              <span class="miss">Miss: #{@miss-count}</span>
+            </div>
+          """
+
+      window.Game = game
+
+      # 初始化遊戲
+      my-game = new Game {
+        piano-root: document.getElementById 'piano-container'
+        note-root: document.getElementById 'note-area'
+        score-root: document.getElementById 'score-display'
+      }
+
+      # 載入樂譜
+      fetch '/assets/data/songs/demo.json'
+        .then (res) -> res.json!
+        .then (data) -> my-game.load-song data
+
+      # 按鈕事件
+      document.getElementById('start-btn').addEventListener 'click', ->
+        my-game.start!
+
+      document.getElementById('stop-btn').addEventListener 'click', ->
+        my-game.stop!
+
+      document.getElementById('reset-btn').addEventListener 'click', ->
+        my-game.reset!

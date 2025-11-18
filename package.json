@@ -1,0 +1,16 @@
+{
+  "name": "piano-rhythm-game",
+  "version": "1.0.0",
+  "description": "Piano Rhythm Game - 落下音符鋼琴遊戲",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx server -r web -p 8070 -o true",
+    "start": "npx server -r web -p 8070"
+  },
+  "keywords": ["piano", "rhythm-game", "music"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@zbryikt/template": "latest"
+  }
+}
